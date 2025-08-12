@@ -11,14 +11,17 @@ interface Ingredient {
   name: string;
   position: number;
   available: boolean;
+  createdBy?: string;
+  createdByName?: string;
 }
 
 interface IngredientManagerProps {
   workspaceId: string;
   currentSession: string;
+  currentUserName: string;
 }
 
-export function IngredientManager({ workspaceId, currentSession }: IngredientManagerProps) {
+export function IngredientManager({ workspaceId, currentSession, currentUserName }: IngredientManagerProps) {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [newInput, setNewInput] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -44,7 +47,9 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
       id: item.id,
       name: item.content.name,
       position: item.position_x || 0,
-      available: item.content.available || true
+      available: item.content.available || true,
+      createdBy: item.created_by,
+      createdByName: item.created_by_name
     }));
 
     setIngredients(parsedIngredients);
@@ -66,9 +71,7 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
         // Handle all events that affect ingredients in this workspace
         const isIngredientEvent = 
           (payload.new && 'item_type' in payload.new && payload.new.item_type === 'ingredient') ||
-          (payload.old && 'item_type' in payload.old && payload.old.item_type === 'ingredient') ||
-          (payload.eventType === 'DELETE' && payload.old) || 
-          (payload.eventType === 'UPDATE');
+          (payload.old && 'item_type' in payload.old && payload.old.item_type === 'ingredient');
         
         if (isIngredientEvent) {
           console.log('Processing ingredient event - fetching latest ingredients');
@@ -112,7 +115,8 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
           available: true
         },
         position_x: nextPosition,
-        created_by: currentSession
+        created_by: currentSession,
+        created_by_name: currentUserName
       })
       .select();
 
@@ -193,7 +197,8 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
         alert(`Failed to delete ingredient: ${error.message}`);
       } else {
         console.log('Ingredient removed successfully');
-        // Real-time subscription should handle the update automatically
+        // Manually refetch ingredients to ensure UI updates immediately
+        fetchIngredients();
       }
     } catch (err) {
       console.error('Exception during ingredient deletion:', err);
@@ -216,7 +221,7 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
             value={newInput}
             onChange={(e) => setNewInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="pl-10 h-12 rounded-2xl border-cooking-saffron/30 focus:border-cooking-saffron focus:ring-cooking-saffron/20 bg-white/90"
+            className="px-4 h-12 rounded-2xl border-cooking-saffron/30 focus:border-cooking-saffron focus:ring-cooking-saffron/20 bg-white/90 text-cooking-warmBrown font-medium placeholder:text-cooking-warmBrown/50"
             disabled={isLoading}
           />
         </div>
@@ -227,7 +232,6 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
           size="default"
           className="h-12 px-6 rounded-2xl"
         >
-          <span className="text-lg mr-1">➕</span>
           Add
         </Button>
       </div>
@@ -261,14 +265,20 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
                     />
                   ) : (
                     <div className="flex items-center gap-2 flex-1">
-                      <span className="text-lg">🥬</span>
-                      <span 
-                        className="flex-1 cursor-pointer text-cooking-warmBrown font-medium hover:text-cooking-saffron transition-colors duration-200 group-hover:text-cooking-saffron"
-                        onClick={() => startEditing(ingredient)}
-                        title="Click to edit"
-                      >
-                        {ingredient.name}
-                      </span>
+                      <div className="flex-1">
+                        <span 
+                          className="cursor-pointer text-cooking-warmBrown font-medium hover:text-cooking-saffron transition-colors duration-200 group-hover:text-cooking-saffron block"
+                          onClick={() => startEditing(ingredient)}
+                          title="Click to edit"
+                        >
+                          {ingredient.name}
+                        </span>
+                        {ingredient.createdByName && (
+                          <span className="text-xs text-cooking-warmBrown/60 mt-0.5 block">
+                            Added by {ingredient.createdByName}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -291,11 +301,9 @@ export function IngredientManager({ workspaceId, currentSession }: IngredientMan
             {ingredients.length > 0 && (
               <div className="mt-4 p-3 bg-cooking-herb/10 rounded-2xl border border-cooking-herb/20">
                 <div className="flex items-center gap-2 text-cooking-herb">
-                  <span className="text-lg">✨</span>
                   <span className="text-sm font-medium">
                     Great! You have {ingredients.length} ingredient{ingredients.length !== 1 ? 's' : ''} ready to cook with
                   </span>
-                  <span className="text-lg">🍳</span>
                 </div>
               </div>
             )}

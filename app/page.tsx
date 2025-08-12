@@ -6,7 +6,7 @@ export default function Home() {
       <div className="text-center space-y-8 max-w-2xl">
         <div className="space-y-2">
           <h1 className="text-6xl font-bold text-primary animate-bounce-gentle">
-            🍽️ Eatin
+            🍽️ Our Kitchen
           </h1>
           <p className="text-cooking-saffron text-sm font-medium tracking-wide">
             Cook • Share • Connect
@@ -35,7 +35,7 @@ export default function Home() {
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
             With <span className="font-bold text-cooking-saffron bg-cooking-butter/20 px-2 py-1 rounded-lg">
-              🍅 Eatin
+              🍅 Our Kitchen
             </span>, you can share your ingredients with friends and whip up amazing meals together in no time!
           </p>
           <div className="flex justify-center gap-6 text-2xl pt-2">

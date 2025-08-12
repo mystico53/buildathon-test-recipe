@@ -42,6 +42,7 @@ CREATE TABLE workspace_items (
   position_x integer DEFAULT 0,
   position_y integer DEFAULT 0,
   created_by text,
+  created_by_name text,
   created_at timestamp with time zone DEFAULT now() NOT NULL,
   updated_at timestamp with time zone DEFAULT now() NOT NULL
 );

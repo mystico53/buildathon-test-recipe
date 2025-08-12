@@ -19,6 +19,20 @@ export interface ActivitySession {
   userName: string;
 }
 
+// Cooking-themed color palette for user avatars
+const COOKING_AVATAR_COLORS = [
+  'hsl(32 95% 44%)',    // cooking-saffron
+  'hsl(0 84% 51%)',     // cooking-paprika  
+  'hsl(142 76% 36%)',   // cooking-herb
+  'hsl(0 84% 60%)',     // cooking-cherry
+  'hsl(45 93% 58%)',    // cooking-butter
+  'hsl(84 81% 44%)',    // cooking-olive
+  'hsl(16 85% 55%)',    // warm orange (carrot)
+  'hsl(260 90% 55%)',   // eggplant purple
+  'hsl(50 100% 50%)',   // lemon yellow
+  'hsl(25 75% 47%)',    // cinnamon brown
+] as const;
+
 // Generate consistent color for user based on session ID
 export const getUserColor = (userSession: string): string => {
   let hash = 0;
@@ -28,8 +42,8 @@ export const getUserColor = (userSession: string): string => {
     hash = hash & hash;
   }
   
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 70%, 50%)`;
+  const colorIndex = Math.abs(hash) % COOKING_AVATAR_COLORS.length;
+  return COOKING_AVATAR_COLORS[colorIndex];
 };
 
 // Session storage helpers
@@ -44,13 +58,32 @@ export const getStoredSession = (workspaceId: string): string => {
   return newSession;
 };
 
+// Fun preset chef names
+const CHEF_NAMES = [
+  'Chef Sizzle',
+  'Pasta Prince',
+  'Spice Master',
+  'Cookie Monster',
+  'Grill Guru',
+  'Soup Sage',
+  'Bread Buddy',
+  'Salad Star',
+  'Pizza Pro',
+  'Cake Captain'
+];
+
+const getRandomChefName = (): string => {
+  const randomIndex = Math.floor(Math.random() * CHEF_NAMES.length);
+  return CHEF_NAMES[randomIndex];
+};
+
 export const getStoredUserName = (workspaceId: string): string => {
-  if (typeof window === 'undefined') return `User-${crypto.randomUUID().slice(0, 4)}`;
+  if (typeof window === 'undefined') return getRandomChefName();
   
   const sessionStored = sessionStorage.getItem(`workspace-name-${workspaceId}`);
   if (sessionStored) return sessionStored;
   
-  const defaultName = `User-${crypto.randomUUID().slice(0, 4)}`;
+  const defaultName = getRandomChefName();
   sessionStorage.setItem(`workspace-name-${workspaceId}`, defaultName);
   return defaultName;
 };

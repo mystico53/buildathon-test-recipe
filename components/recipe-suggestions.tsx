@@ -133,7 +133,6 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
         <div className="flex items-center gap-2">
           <span className="text-2xl">👨‍🍳</span>
           <h3 className="text-xl font-bold text-cooking-warmBrown">Recipe Suggestions</h3>
-          <span className="text-2xl">📝</span>
         </div>
         <Button 
           onClick={generateRecipes} 
@@ -142,7 +141,6 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
           size="default"
           className="h-12 px-6 rounded-2xl"
         >
-          <span className="text-lg mr-1">{isGenerating ? '🔄' : '✨'}</span>
           {isGenerating ? 'Generating...' : 'Suggest Recipes'}
         </Button>
       </div>
@@ -174,18 +172,17 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
             <div key={index} className="border border-cooking-saffron/30 rounded-2xl p-6 space-y-4 bg-white/90 shadow-cooking hover:shadow-cooking-lg transition-all duration-200 hover-lift">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl">🍽️</span>
                   <h4 className="font-bold text-lg text-cooking-warmBrown">{recipe.title}</h4>
                 </div>
                 <div className="flex gap-2 text-xs">
                   {recipe.prep_time && (
                     <Badge variant="outline" className="border-cooking-herb/50 text-cooking-herb bg-cooking-herb/10">
-                      ⏱️ {recipe.prep_time}
+                      {recipe.prep_time}
                     </Badge>
                   )}
                   {recipe.difficulty && (
                     <Badge variant="outline" className="border-cooking-saffron/50 text-cooking-saffron bg-cooking-saffron/10">
-                      🎯 {recipe.difficulty}
+                      {recipe.difficulty}
                     </Badge>
                   )}
                 </div>
@@ -194,8 +191,7 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Available Ingredients */}
                 <div>
-                  <h5 className="text-sm font-bold text-cooking-herb mb-2 flex items-center gap-1">
-                    <span>🥬</span>
+                  <h5 className="text-sm font-bold text-cooking-herb mb-2">
                     Available Ingredients:
                   </h5>
                   <div className="flex flex-wrap gap-1">
@@ -210,17 +206,16 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
                 {/* Missing Ingredients */}
                 {recipe.ingredients_missing.length > 0 && (
                   <div>
-                    <h5 className="text-sm font-bold text-cooking-paprika mb-2 flex items-center gap-1">
-                      <span>🛒</span>
-                      Missing Ingredients:
+                    <h5 className="text-sm font-bold text-cooking-warmBrown/70 mb-2">
+                      Need to get:
                     </h5>
                     <div className="flex flex-wrap gap-1">
                       {recipe.ingredients_missing.map((ingredient, i) => (
-                        <Badge key={i} variant="outline" className="text-xs border-cooking-paprika/30 text-cooking-paprika bg-cooking-paprika/10">
-                          ✕ {ingredient}
+                        <Badge key={i} variant="outline" className="text-xs border-cooking-saffron/30 text-cooking-warmBrown bg-cooking-saffron/10 flex flex-col items-start p-2">
+                          <span>{ingredient}</span>
                           {recipe.substitutions[ingredient] && (
-                            <span className="text-cooking-warmBrown/70 ml-1">
-                              (or {recipe.substitutions[ingredient]})
+                            <span className="text-cooking-warmBrown/60 text-xs mt-1 font-normal">
+                              or {recipe.substitutions[ingredient]}
                             </span>
                           )}
                         </Badge>
@@ -232,8 +227,7 @@ export function RecipeSuggestions({ workspaceId, currentSession }: RecipeSuggest
 
               {/* Instructions */}
               <div>
-                <h5 className="text-sm font-bold text-cooking-warmBrown mb-3 flex items-center gap-1">
-                  <span>👩‍🍳</span>
+                <h5 className="text-sm font-bold text-cooking-warmBrown mb-3">
                   Cooking Instructions:
                 </h5>
                 <ol className="text-sm text-cooking-warmBrown/80 space-y-2 ml-4">

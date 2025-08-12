@@ -97,6 +97,7 @@ export default function WorkspacePage() {
           currentSession={session}
           onlineUsers={onlineUsers}
           isOnline={isOnline}
+          workspaceId={workspaceId}
           onCopyWorkspaceUrl={copyWorkspaceUrl}
           onExitWorkspace={handleExitWorkspace}
         />
@@ -123,6 +124,7 @@ export default function WorkspacePage() {
             <IngredientManager 
               workspaceId={workspaceId} 
               currentSession={session} 
+              currentUserName={userName}
             />
           </div>
 
@@ -154,7 +156,7 @@ export default function WorkspacePage() {
                 onClick={copyWorkspaceUrl}
                 className="px-6 py-3 bg-gradient-to-r from-cooking-saffron to-cooking-paprika text-white rounded-2xl text-sm font-medium hover:shadow-cooking-lg hover:scale-105 transition-all duration-200 whitespace-nowrap self-start shadow-cooking"
               >
-                Share Workspace
+                Share this Kitchen
               </button>
             </div>
           </div>

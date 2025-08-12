@@ -1,12 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { OnlineUser, getUserColor } from '@/lib/workspace-activity';
+
+// Creative kitchen workspace names
+const KITCHEN_NAMES = [
+  "Cozy Kitchen Corner",
+  "Chef's Creative Space", 
+  "Flavor Laboratory",
+  "Cooking Command Center",
+  "Recipe Workshop",
+  "Culinary Studio",
+  "Kitchen Playground",
+  "Taste Testing HQ",
+  "Food Innovation Hub",
+  "Spice & Everything Nice"
+];
+
+// Creative connection status messages
+const CONNECTION_MESSAGES = {
+  online: [
+    "Cooking together",
+    "In the kitchen",
+    "Ready to cook",
+    "Prepping ingredients",
+    "Stirring up ideas",
+    "Heat is on"
+  ],
+  offline: [
+    "Kitchen closed",
+    "Away from stove",
+    "Taking a break"
+  ]
+};
 
 interface UserActivityIndicatorProps {
   currentSession: string;
   onlineUsers: OnlineUser[];
   isOnline: boolean;
+  workspaceId?: string;
   onCopyWorkspaceUrl?: () => void;
   onExitWorkspace?: () => Promise<void>;
 }
@@ -88,21 +120,46 @@ export const UserActivityIndicator = ({
   currentSession,
   onlineUsers,
   isOnline,
+  workspaceId,
   onCopyWorkspaceUrl,
   onExitWorkspace,
 }: UserActivityIndicatorProps) => {
+  // Generate consistent names based on workspace ID
+  const kitchenName = useMemo(() => {
+    if (!workspaceId) return "Kitchen Workspace";
+    let hash = 0;
+    for (let i = 0; i < workspaceId.length; i++) {
+      const char = workspaceId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    const nameIndex = Math.abs(hash) % KITCHEN_NAMES.length;
+    return KITCHEN_NAMES[nameIndex];
+  }, [workspaceId]);
+
+  const connectionMessage = useMemo(() => {
+    if (!workspaceId) return isOnline ? 'Connected to kitchen' : 'Disconnected';
+    let hash = 0;
+    for (let i = 0; i < workspaceId.length; i++) {
+      const char = workspaceId.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    const messages = isOnline ? CONNECTION_MESSAGES.online : CONNECTION_MESSAGES.offline;
+    const messageIndex = Math.abs(hash) % messages.length;
+    return messages[messageIndex];
+  }, [workspaceId, isOnline]);
   return (
     <div className="bg-white/90 rounded-2xl p-6 shadow-cooking-lg border border-cooking-saffron/20">
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">👥</span>
-            <h1 className="text-2xl font-bold text-cooking-warmBrown">Kitchen Workspace</h1>
+            <h1 className="text-2xl font-bold text-cooking-warmBrown">{kitchenName}</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className={`w-3 h-3 rounded-full ${isOnline ? 'bg-cooking-herb animate-pulse-slow' : 'bg-cooking-paprika'}`}></div>
             <span className="text-sm font-medium text-cooking-warmBrown/70">
-              {isOnline ? 'Connected to kitchen' : 'Disconnected'}
+              {connectionMessage}
             </span>
           </div>
         </div>
@@ -136,7 +193,6 @@ export const UserActivityIndicator = ({
               onClick={onCopyWorkspaceUrl}
               className="inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cooking-saffron/20 disabled:pointer-events-none disabled:opacity-50 bg-gradient-to-r from-cooking-saffron to-cooking-paprika text-white hover:shadow-cooking-lg hover:scale-105 h-10 px-4 shadow-cooking"
             >
-              <span className="mr-1">📋</span>
               Copy Link
             </button>
           )}
@@ -146,7 +202,6 @@ export const UserActivityIndicator = ({
               onClick={onExitWorkspace}
               className="inline-flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cooking-saffron/20 disabled:pointer-events-none disabled:opacity-50 border border-cooking-saffron/30 bg-white/90 hover:bg-cooking-lightCream hover:border-cooking-saffron/50 text-cooking-warmBrown h-10 px-4"
             >
-              <span className="mr-1">🚪</span>
               Exit Kitchen
             </button>
           )}
