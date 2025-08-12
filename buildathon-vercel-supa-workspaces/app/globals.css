@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cooking-themed warm palette */
+    --background: 35 100% 98.5%; /* Warm cream #FFFBF5 */
+    --foreground: 28 100% 12%; /* Rich brown #451A03 */
+    --card: 35 85% 96%; /* Light cream #FEF9F3 */
+    --card-foreground: 28 100% 12%; /* Rich brown #451A03 */
+    --popover: 35 85% 96%; /* Light cream #FEF9F3 */
+    --popover-foreground: 28 100% 12%; /* Rich brown #451A03 */
+    --primary: 32 95% 44%; /* Saffron/Golden Orange #D97706 */
+    --primary-foreground: 0 0% 98%; /* White text */
+    --secondary: 0 84% 51%; /* Paprika Red #DC2626 */
+    --secondary-foreground: 0 0% 98%; /* White text */
+    --muted: 32 45% 85%; /* Warm beige #F3E8D6 */
+    --muted-foreground: 28 50% 45%; /* Medium brown */
+    --accent: 142 76% 36%; /* Fresh herb green #16A34A */
+    --accent-foreground: 0 0% 98%; /* White text */
+    --destructive: 0 84% 60%; /* Cherry tomato red #EF4444 */
+    --destructive-foreground: 0 0% 98%;
+    --border: 32 35% 88%; /* Warm light border */
+    --input: 32 25% 90%; /* Warm input background */
+    --ring: 32 95% 44%; /* Saffron focus ring */
+    --chart-1: 32 95% 44%; /* Saffron */
+    --chart-2: 142 76% 36%; /* Herb green */
+    --chart-3: 0 84% 51%; /* Paprika red */
+    --chart-4: 45 93% 58%; /* Butter yellow #FCD34D */
+    --chart-5: 84 81% 44%; /* Olive green #65A30D */
+    --radius: 0.75rem; /* Friendlier rounded corners */
+  }
+  .dark {
+    /* Dark cooking theme - cozy evening kitchen */
+    --background: 28 35% 8%; /* Deep warm brown */
+    --foreground: 35 25% 85%; /* Warm cream text */
+    --card: 28 25% 12%; /* Dark warm card */
+    --card-foreground: 35 25% 85%; /* Warm cream text */
+    --popover: 28 25% 12%; /* Dark warm popover */
+    --popover-foreground: 35 25% 85%; /* Warm cream text */
+    --primary: 32 85% 55%; /* Brighter saffron for dark mode */
+    --primary-foreground: 28 100% 12%; /* Dark brown text */
+    --secondary: 0 75% 58%; /* Brighter paprika for dark mode */
+    --secondary-foreground: 0 0% 98%; /* White text */
+    --muted: 28 20% 20%; /* Dark muted brown */
+    --muted-foreground: 35 15% 65%; /* Medium warm text */
+    --accent: 142 65% 45%; /* Brighter herb green for dark */
+    --accent-foreground: 0 0% 98%; /* White text */
+    --destructive: 0 75% 58%; /* Bright cherry tomato */
+    --destructive-foreground: 0 0% 98%;
+    --border: 28 15% 25%; /* Warm dark border */
+    --input: 28 15% 18%; /* Dark warm input */
+    --ring: 32 85% 55%; /* Bright saffron ring */
+    --chart-1: 32 85% 55%; /* Bright saffron */
+    --chart-2: 142 65% 45%; /* Bright herb green */
+    --chart-3: 0 75% 58%; /* Bright paprika */
+    --chart-4: 45 85% 65%; /* Bright butter yellow */
+    --chart-5: 84 70% 52%; /* Bright olive green */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  /* Cooking-themed shadows and effects */
+  .shadow-cooking {
+    box-shadow: 0 4px 6px -1px hsl(32 20% 75% / 0.1), 
+                0 2px 4px -1px hsl(32 20% 75% / 0.06);
+  }
+  
+  .shadow-cooking-lg {
+    box-shadow: 0 10px 15px -3px hsl(32 20% 75% / 0.1), 
+                0 4px 6px -2px hsl(32 20% 75% / 0.05);
+  }
+  
+  /* Warm gradient backgrounds */
+  .bg-cooking-gradient {
+    background: linear-gradient(135deg, hsl(32 95% 44%) 0%, hsl(28 85% 50%) 100%);
+  }
+  
+  .bg-cooking-gradient-subtle {
+    background: linear-gradient(135deg, hsl(35 85% 96%) 0%, hsl(32 65% 92%) 100%);
+  }
+  
+  /* Friendly animations */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-1px);
+  }
+}
